@@ -1,0 +1,165 @@
+/* ================================
+   Global App Styles
+================================ */
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ================================
+   Navbar
+================================ */
+
+.navbar {
+  width: 100%;
+  padding: 18px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #163a5f;
+  letter-spacing: 0.5px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333333;
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #1d6fa5;
+}
+
+.consultation-btn {
+  padding: 11px 20px;
+  border-radius: 6px;
+  background: #163a5f;
+  color: #ffffff !important;
+  transition: background 0.3s ease;
+}
+
+.consultation-btn:hover {
+  background: #1d6fa5;
+}
+
+/* ================================
+   Home Section
+================================ */
+
+.home {
+  min-height: calc(100vh - 75px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+  box-sizing: border-box;
+  background: linear-gradient(
+    135deg,
+    #f5f9fc,
+    #ffffff
+  );
+}
+
+.home-content {
+  max-width: 850px;
+}
+
+.home-content h1 {
+  margin: 0 0 20px;
+  font-size: 52px;
+  line-height: 1.15;
+  color: #163a5f;
+  font-weight: 700;
+}
+
+.home-content p {
+  max-width: 650px;
+  margin: 0 auto 30px;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #5f6b76;
+}
+
+.primary-btn {
+  display: inline-block;
+  padding: 14px 28px;
+  border-radius: 6px;
+  background: #163a5f;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.primary-btn:hover {
+  background: #1d6fa5;
+  transform: translateY(-2px);
+}
+
+/* ================================
+   Responsive Design
+================================ */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 25px;
+  }
+
+  .nav-links {
+    gap: 15px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+
+  .home-content h1 {
+    font-size: 38px;
+  }
+
+  .home-content p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .home {
+    padding: 40px 20px;
+  }
+
+  .home-content h1 {
+    font-size: 32px;
+  }
+}
