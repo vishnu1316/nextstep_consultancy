@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Admission System | NextStep Global</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .admission-tabs {
+            display: flex;
+            background: white;
+            padding: 8px;
+            border-radius: 14px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-light);
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+        .adm-tab {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: #64748B;
+            transition: 0.25s;
+        }
+        .adm-tab.active {
+            background: #0B1F54;
+            color: white;
+            box-shadow: 0 4px 12px rgba(11, 31, 84, 0.2);
+        }
+        .step-progress {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 35px;
+            padding: 0 20px;
+        }
+        .step-progress::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: #E2E8F0;
+            z-index: 1;
+        }
+        .step-node {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100px;
+        }
+        .step-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #CBD5E1;
+            color: #64748B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        .step-node.active .step-circle {
+            border-color: #FF6600;
+            background: #FF6600;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.2);
+        }
+        .step-node.completed .step-circle {
+            border-color: #10B981;
+            background: #10B981;
+            color: white;
+        }
+        .step-label {
+            font-size: 12px;
+            color: #64748B;
+            font-weight: 600;
+            text-align: center;
+        }
+        .step-node.active .step-label {
+            color: #0B1F54;
+            font-weight: 700;
+        }
+        .form-step-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .form-step-section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .upload-card {
+            border: 2px dashed #CBD5E1;
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            background: #F8FAFC;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .upload-card:hover {
+            border-color: #FF6600;
+            background: #FFF7ED;
+        }
+        .upload-card.uploaded {
+            border-color: #10B981;
+            background: #F0FDF4;
+        }
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .upload-card h5 {
+            font-size: 14px;
+            color: #0B1F54;
+            margin-bottom: 4px;
+        }
+        .upload-card p {
+            font-size: 11px;
+            color: #64748B;
+        }
+        .upload-status {
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+            color: #2563EB;
+        }
+        .wizard-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #F1F5F9;
+        }
+
+        /* Tracker Styling */
+        .tracker-box {
+            background: white;
+            border-radius: 18px;
+            padding: 35px;
+            border: 1px solid var(--gray-light);
+            box-shadow: var(--shadow-sm);
+        }
+        .tracker-search {
+            display: flex;
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .tracker-search input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid var(--gray-light);
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+        .tracker-search input:focus {
+            border-color: #FF6600;
+        }
+        .timeline-stepper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+            margin: 30px 0;
+            padding-left: 40px;
+        }
+        .timeline-stepper::before {
+            content: '';
+            position: absolute;
+            left: 17px;
+            top: 10px;
+            bottom: 20px;
+            width: 3px;
+            background: #E2E8F0;
+        }
+        .timeline-item {
+            position: relative;
+        }
+        .timeline-circle {
+            position: absolute;
+            left: -40px;
+            top: 2px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #CBD5E1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .timeline-item.done .timeline-circle {
+            border-color: #10B981;
+            background: #10B981;
+            color: white;
+        }
+        .timeline-item.current .timeline-circle {
+            border-color: #FF6600;
+            background: #FF6600;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.2);
+        }
+        .timeline-content h4 {
+            font-size: 16px;
+            color: #0B1F54;
+            margin-bottom: 2px;
+        }
+        .timeline-content p {
+            font-size: 13px;
+            color: #64748B;
+        }
+        @media (max-width: 768px) {
+            .form-row, .upload-grid {
+                grid-template-columns: 1fr;
+            }
+            .step-progress {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="top-left">
+        <span>📝 Admissions Desk: Active Intakes 2026–2027</span>
+        <span>✉ admissions@nextstepglobal.in</span>
+    </div>
+    <div class="top-right">
+        <span>Fast-Track Processing Available</span>
+        <a href="dashboard.html" style="color:#FFD580; font-weight:600;">Student Dashboard ➔</a>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <h2>NextStep <span>Global</span></h2>
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="universities.html">Universities</a></li>
+            <li><a href="admission.html" class="active">Admissions</a></li>
+            <li><a href="counselling.html">Counselling</a></li>
+            <li><a href="dashboard.html">Student Portal</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="api-hub.html">API Hub</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="login.html" class="portal-btn">Login</a>
+        </div>
+    </nav>
+</header>
+
+<!-- PAGE CONTAINER -->
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Student Admission & Application System</h1>
+            <p>Module 4 Prototype: 5-Step Application Form, Document Handling & Live Application Tracking (Charan)</p>
+        </div>
+        <div class="module-badge">
+            Module 4: Charan (Admission System)
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="admission-tabs">
+        <div class="adm-tab active" id="tabApplyNav" onclick="switchAdmissionTab('apply')">
+            ✍️ Step-by-Step University Application
+        </div>
+        <div class="adm-tab" id="tabTrackNav" onclick="switchAdmissionTab('track')">
+            📍 Track Application Status & Offer Letters
+        </div>
+    </div>
+
+    <!-- VIEW 1: APPLICATION WIZARD -->
+    <div id="applyView">
+        <div class="card">
+            <!-- Step Progress Nodes -->
+            <div class="step-progress">
+                <div class="step-node active" id="node1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">Personal Info</span>
+                </div>
+                <div class="step-node" id="node2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">Academics</span>
+                </div>
+                <div class="step-node" id="node3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">University</span>
+                </div>
+                <div class="step-node" id="node4">
+                    <div class="step-circle">4</div>
+                    <span class="step-label">Documents</span>
+                </div>
+                <div class="step-node" id="node5">
+                    <div class="step-circle">5</div>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <form id="multiStepForm" onsubmit="submitApplication(event)">
+                <!-- STEP 1: PERSONAL DETAILS -->
+                <div class="form-step-section active" id="step1">
+                    <h3 class="card-title">Step 1: Applicant Personal Details</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Legal Name (as per Passport) *</label>
+                            <input type="text" id="appFullName" value="M. Reddy Vishnu Vardhan" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="appEmail" value="vishnu@nextstepglobal.in" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="appPhone" value="+91 88974 53569" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth *</label>
+                            <input type="date" id="appDob" value="2003-08-15" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Passport Number *</label>
+                            <input type="text" id="appPassport" value="Z6849201" placeholder="e.g. A1234567" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Address</label>
+                            <input type="text" id="appAddress" value="Tirupati, Andhra Pradesh, India" required>
+                        </div>
+                    </div>
+                    <div class="wizard-buttons">
+                        <div></div>
+                        <button type="button" class="btn-primary" onclick="goToStep(2)">Proceed to Academics ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: ACADEMIC DETAILS -->
+                <div class="form-step-section" id="step2">
+                    <h3 class="card-title">Step 2: Academic Background & Test Scores</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Highest Qualification Achieved *</label>
+                            <select id="appDegree">
+                                <option value="B.Tech Computer Science">B.Tech in Computer Science / IT</option>
+                                <option value="B.Tech Mechanical / Civil">B.Tech in Mechanical / Civil / Other</option>
+                                <option value="B.Com / BBA">B.Com / BBA / Finance</option>
+                                <option value="B.Sc Sciences">B.Sc Life Sciences / Pharma</option>
+                                <option value="12th / Intermediate">12th Grade / Intermediate (Applying for UG)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Institution / Board *</label>
+                            <input type="text" id="appCollege" value="SV University, Tirupati" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Overall Percentage or CGPA *</label>
+                            <input type="text" id="appGpa" value="8.8 / 10 CGPA" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Graduation / Passing Year *</label>
+                            <input type="text" id="appYear" value="2025" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>English Language Exam *</label>
+                            <select id="appEnglishTest">
+                                <option value="IELTS">IELTS Academic</option>
+                                <option value="TOEFL">TOEFL iBT</option>
+                                <option value="PTE">PTE Academic</option>
+                                <option value="Duolingo">Duolingo English Test</option>
+                                <option value="Waiver">Requesting IELTS Medium-of-Instruction Waiver</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Overall Score / Bands *</label>
+                            <input type="text" id="appEnglishScore" value="7.5 Overall" required>
+                        </div>
+                    </div>
+                    <div class="wizard-buttons">
+                        <button type="button" class="btn-secondary" onclick="goToStep(1)">← Back</button>
+                        <button type="button" class="btn-primary" onclick="goToStep(3)">Proceed to University ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: UNIVERSITY SELECTION -->
+                <div class="form-step-section" id="step3">
+                    <h3 class="card-title">Step 3: Target Destination & Program</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Target Country *</label>
+                            <select id="appCountry" onchange="populateUniversities()">
+                                <option value="UK">United Kingdom (UK)</option>
+                                <option value="USA">United States (USA)</option>
+                                <option value="Canada">Canada</option>
+                                <option value="Australia">Australia</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Ireland">Ireland</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Target University *</label>
+                            <select id="appUniSelect">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Target Course / Specialization *</label>
+                            <input type="text" id="appCourse" value="MSc Advanced Computer Science" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Target Intake *</label>
+                            <select id="appIntake">
+                                <option value="Fall 2026 (Sept/Oct)">Fall 2026 (Sept/Oct)</option>
+                                <option value="Spring 2027 (Jan/Feb)">Spring 2027 (Jan/Feb)</option>
+                                <option value="Summer 2026 (May)">Summer 2026 (May)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="wizard-buttons">
+                        <button type="button" class="btn-secondary" onclick="goToStep(2)">← Back</button>
+                        <button type="button" class="btn-primary" onclick="goToStep(4)">Proceed to Documents ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: DOCUMENT UPLOAD -->
+                <div class="form-step-section" id="step4">
+                    <h3 class="card-title">Step 4: Supporting Document Uploads</h3>
+                    <p style="font-size:13px; color:var(--gray); margin-bottom:20px;">Click each tile to upload or simulate document verification.</p>
+                    
+                    <div class="upload-grid">
+                        <div class="upload-card uploaded" onclick="simulateUpload(this, 'Passport')">
+                            <div class="upload-icon">🛂</div>
+                            <h5>Passport Front & Back</h5>
+                            <p>PDF or JPG up to 5MB</p>
+                            <div class="upload-status" style="color:#10B981;">✓ Uploaded (Passport.pdf)</div>
+                        </div>
+
+                        <div class="upload-card uploaded" onclick="simulateUpload(this, 'Degree Transcript')">
+                            <div class="upload-icon">📜</div>
+                            <h5>Academic Transcripts / Degree</h5>
+                            <p>Official Consolidated Marks</p>
+                            <div class="upload-status" style="color:#10B981;">✓ Uploaded (Transcripts.pdf)</div>
+                        </div>
+
+                        <div class="upload-card uploaded" onclick="simulateUpload(this, 'English Score')">
+                            <div class="upload-icon">📊</div>
+                            <h5>English Test TRF / Scorecard</h5>
+                            <p>IELTS / TOEFL Official PDF</p>
+                            <div class="upload-status" style="color:#10B981;">✓ Uploaded (IELTS_7.5.pdf)</div>
+                        </div>
+
+                        <div class="upload-card uploaded" onclick="simulateUpload(this, 'SOP & LORs')">
+                            <div class="upload-icon">✍️</div>
+                            <h5>Statement of Purpose (SOP)</h5>
+                            <p>Draft or Finalized SOP</p>
+                            <div class="upload-status" style="color:#10B981;">✓ Uploaded (SOP_Final.docx)</div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-buttons">
+                        <button type="button" class="btn-secondary" onclick="goToStep(3)">← Back</button>
+                        <button type="button" class="btn-primary" onclick="goToStep(5)">Review Dossier ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 5: REVIEW & SUBMIT -->
+                <div class="form-step-section" id="step5">
+                    <h3 class="card-title">Step 5: Review & Formal Submission</h3>
+                    <div style="background:#F8FAFC; border:1px solid var(--gray-light); border-radius:14px; padding:20px; margin-bottom:25px;">
+                        <h4 style="color:#0B1F54; margin-bottom:12px;">Applicant Dossier Summary</h4>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:13px;">
+                            <div><strong>Candidate:</strong> <span id="revName"></span></div>
+                            <div><strong>Email:</strong> <span id="revEmail"></span></div>
+                            <div><strong>Target Country:</strong> <span id="revCountry"></span></div>
+                            <div><strong>Selected University:</strong> <span id="revUni"></span></div>
+                            <div><strong>Course:</strong> <span id="revCourse"></span></div>
+                            <div><strong>Intake:</strong> <span id="revIntake"></span></div>
+                            <div><strong>Academic GPA:</strong> <span id="revGpa"></span></div>
+                            <div><strong>English Band:</strong> <span id="revEnglish"></span></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom:20px;">
+                        <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#334155; cursor:pointer;">
+                            <input type="checkbox" checked required>
+                            I declare that the academic credentials and passport details submitted are accurate and authenticate NextStep Global to process my admission.
+                        </label>
+                    </div>
+
+                    <div class="wizard-buttons">
+                        <button type="button" class="btn-secondary" onclick="goToStep(4)">← Back</button>
+                        <button type="submit" class="btn-primary" style="background:#10B981; border:none; padding:14px 30px;">
+                            🚀 Confirm & Submit Application
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- VIEW 2: APPLICATION TRACKER -->
+    <div id="trackView" style="display:none;">
+        <div class="tracker-box">
+            <h3 style="color:#0B1F54; text-align:center; margin-bottom:8px;">Real-Time Application Status Tracker</h3>
+            <p style="text-align:center; color:#64748B; font-size:14px; margin-bottom:25px;">Enter your NextStep Application Reference ID to check milestone progress.</p>
+
+            <div class="tracker-search">
+                <input type="text" id="trackInput" placeholder="Enter App ID (e.g. NSG-2026-8941)..." value="NSG-2026-8941">
+                <button class="btn-primary" onclick="lookupTracking()">Track Now</button>
+            </div>
+
+            <!-- Quick sample chips -->
+            <div style="display:flex; justify-content:center; gap:10px; margin-bottom:30px; flex-wrap:wrap;">
+                <span style="font-size:12px; color:#64748B; align-self:center;">Try Sample IDs:</span>
+                <button class="btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="loadSampleTrack('NSG-2026-8941')">NSG-2026-8941 (Vishnu)</button>
+                <button class="btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="loadSampleTrack('NSG-2026-8942')">NSG-2026-8942 (Ananya)</button>
+                <button class="btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="loadSampleTrack('NSG-2026-8944')">NSG-2026-8944 (Sneha)</button>
+            </div>
+
+            <!-- Tracking Details Output -->
+            <div id="trackResultContainer">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+<script src="js/team-bar.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+    let currentStep = 1;
+
+    function goToStep(step) {
+        // Validation check for step 1
+        if (step > 1 && !document.getElementById("appFullName").value) {
+            showToast("Please enter applicant name.", "error");
+            return;
+        }
+
+        currentStep = step;
+        document.querySelectorAll(".form-step-section").forEach(s => s.classList.remove("active"));
+        document.getElementById(`step${step}`).classList.add("active");
+
+        // Update progress nodes
+        for (let i = 1; i <= 5; i++) {
+            const node = document.getElementById(`node${i}`);
+            node.classList.remove("active", "completed");
+            if (i === step) {
+                node.classList.add("active");
+            } else if (i < step) {
+                node.classList.add("completed");
+            }
+        }
+
+        // If step 5, populate review
+        if (step === 5) {
+            document.getElementById("revName").innerText = document.getElementById("appFullName").value;
+            document.getElementById("revEmail").innerText = document.getElementById("appEmail").value;
+            document.getElementById("revCountry").innerText = document.getElementById("appCountry").value;
+            document.getElementById("revUni").innerText = document.getElementById("appUniSelect").value;
+            document.getElementById("revCourse").innerText = document.getElementById("appCourse").value;
+            document.getElementById("revIntake").innerText = document.getElementById("appIntake").value;
+            document.getElementById("revGpa").innerText = document.getElementById("appGpa").value;
+            document.getElementById("revEnglish").innerText = document.getElementById("appEnglishScore").value;
+        }
+    }
+
+    function populateUniversities() {
+        const country = document.getElementById("appCountry").value;
+        const select = document.getElementById("appUniSelect");
+        select.innerHTML = "";
+
+        const unis = NextStepData.getUniversities().filter(u => u.country.toUpperCase() === country.toUpperCase());
+        if (unis.length === 0) {
+            const opt = document.createElement("option");
+            opt.value = "Top Regional University";
+            opt.innerText = "Top Regional Partner University";
+            select.appendChild(opt);
+        } else {
+            unis.forEach(u => {
+                const opt = document.createElement("option");
+                opt.value = u.name;
+                opt.innerText = u.name;
+                select.appendChild(opt);
+            });
+        }
+    }
+
+    function simulateUpload(el, title) {
+        el.classList.add("uploaded");
+        el.querySelector(".upload-status").innerHTML = `✓ Uploaded (${title}.pdf)`;
+        showToast(`${title} uploaded and verified successfully.`, "success");
+    }
+
+    function submitApplication(e) {
+        e.preventDefault();
+        const randId = "NSG-2026-" + Math.floor(1000 + Math.random() * 9000);
+        const newApp = {
+            id: randId,
+            studentName: document.getElementById("appFullName").value,
+            email: document.getElementById("appEmail").value,
+            phone: document.getElementById("appPhone").value,
+            country: document.getElementById("appCountry").value,
+            university: document.getElementById("appUniSelect").value,
+            course: document.getElementById("appCourse").value,
+            intake: document.getElementById("appIntake").value,
+            status: "Submitted",
+            appliedDate: new Date().toISOString().split("T")[0],
+            stage: 1,
+            docsUploaded: ["Passport.pdf", "Transcripts.pdf", "SOP.pdf"]
+        };
+
+        NextStepData.saveApplication(newApp);
+        showToast(`🎉 Application successfully registered with ID: ${randId}`, "success");
+
+        // Automatically switch to tracker tab and display it
+        switchAdmissionTab('track');
+        loadSampleTrack(randId);
+    }
+
+    function switchAdmissionTab(tab) {
+        if (tab === 'apply') {
+            document.getElementById("tabApplyNav").classList.add("active");
+            document.getElementById("tabTrackNav").classList.remove("active");
+            document.getElementById("applyView").style.display = "block";
+            document.getElementById("trackView").style.display = "none";
+        } else {
+            document.getElementById("tabApplyNav").classList.remove("active");
+            document.getElementById("tabTrackNav").classList.add("active");
+            document.getElementById("applyView").style.display = "none";
+            document.getElementById("trackView").style.display = "block";
+        }
+    }
+
+    function lookupTracking() {
+        const id = document.getElementById("trackInput").value.trim();
+        loadSampleTrack(id);
+    }
+
+    function loadSampleTrack(appId) {
+        document.getElementById("trackInput").value = appId;
+        const apps = NextStepData.getApplications();
+        const app = apps.find(a => a.id === appId) || apps[0];
+        const container = document.getElementById("trackResultContainer");
+
+        const stages = [
+            { step: 1, title: "Application Dossier Submitted", desc: "Profile submitted and assigned to NextStep documentation officer." },
+            { step: 2, title: "Documents Verified & Compliance Check", desc: "Passport, marks transcripts, and IELTS verified against university criteria." },
+            { step: 3, title: "Forwarded to University Admissions Board", desc: "Application packet submitted via international university partner portal." },
+            { step: 4, title: "Official Offer Letter Received", desc: "Conditional/Unconditional offer letter issued by university." },
+            { step: 5, title: "Visa Processing & CAS/I-20 Form", desc: "Visa filing, mock interview, and flight departure preparation." }
+        ];
+
+        let timelineHtml = "";
+        stages.forEach(s => {
+            let stateClass = "";
+            let icon = s.step;
+            if (s.step < app.stage) {
+                stateClass = "done";
+                icon = "✓";
+            } else if (s.step === app.stage) {
+                stateClass = "current";
+                icon = "⏳";
+            }
+            timelineHtml += `
+                <div class="timeline-item ${stateClass}">
+                    <div class="timeline-circle">${icon}</div>
+                    <div class="timeline-content">
+                        <h4>${s.title}</h4>
+                        <p>${s.desc}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:22px; margin-bottom:25px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                    <div>
+                        <span style="font-size:12px; color:#64748B;">Application Reference:</span>
+                        <h3 style="color:#0B1F54; font-size:20px;">${app.id}</h3>
+                    </div>
+                    <span class="status-badge status-offer" style="font-size:13px; padding:6px 14px;">${app.status}</span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:12px; margin-top:16px; font-size:13px;">
+                    <div><strong>Applicant:</strong> ${app.studentName}</div>
+                    <div><strong>University:</strong> ${app.university}</div>
+                    <div><strong>Course:</strong> ${app.course}</div>
+                    <div><strong>Intake:</strong> ${app.intake}</div>
+                    <div><strong>Applied On:</strong> ${app.appliedDate}</div>
+                </div>
+            </div>
+
+            <h4 style="color:#0B1F54; margin-bottom:15px;">Application Milestones Stepper</h4>
+            <div class="timeline-stepper">
+                ${timelineHtml}
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                <button class="btn-secondary" onclick="window.print()" style="font-size:13px; padding:8px 16px;">🖨️ Print Application Slip</button>
+                <button class="btn-primary" onclick="showToast('Official Offer PDF generated and downloaded.', 'success')" style="font-size:13px; padding:8px 16px;">📥 Download Offer Dossier</button>
+            </div>
+        `;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        populateUniversities();
+
+        // Check if track parameter is in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const trackId = urlParams.get('track');
+        const uniParam = urlParams.get('uni');
+
+        if (trackId) {
+            switchAdmissionTab('track');
+            loadSampleTrack(trackId);
+        } else {
+            loadSampleTrack("NSG-2026-8941");
+        }
+
+        if (uniParam) {
+            setTimeout(() => {
+                const uniSelect = document.getElementById("appUniSelect");
+                for (let i = 0; i < uniSelect.options.length; i++) {
+                    if (uniSelect.options[i].value === uniParam) {
+                        uniSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }, 200);
+        }
+    });
+</script>
+</body>
+</html>
