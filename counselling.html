@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counselling & Communication | NextStep Global</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .counsel-layout {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 30px;
+        }
+        .mode-selection-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .mode-card {
+            border: 2px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 20px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.25s;
+            background: #F8FAFC;
+        }
+        .mode-card.active, .mode-card:hover {
+            border-color: #FF6600;
+            background: #FFF7ED;
+        }
+        .mode-card h4 {
+            color: #0B1F54;
+            font-size: 15px;
+            margin: 6px 0 2px;
+        }
+        .counsellor-select-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .counsellor-option {
+            border: 2px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: 0.25s;
+            background: #FFFFFF;
+        }
+        .counsellor-option.active, .counsellor-option:hover {
+            border-color: #2563EB;
+            background: #EFF6FF;
+        }
+        .counsellor-avatar-lg {
+            font-size: 38px;
+            background: #F1F5F9;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .slot-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 12px 0 24px;
+        }
+        .slot-pill {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #CBD5E1;
+            background: #F8FAFC;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .slot-pill.active, .slot-pill:hover {
+            background: #0B1F54;
+            color: white;
+            border-color: #0B1F54;
+        }
+        .notice-card {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid #E2E8F0;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .notice-icon {
+            font-size: 20px;
+            background: #EFF6FF;
+            padding: 8px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        .notice-card h5 {
+            font-size: 14px;
+            color: #0B1F54;
+            margin-bottom: 2px;
+        }
+        .notice-card p {
+            font-size: 12px;
+            color: #64748B;
+            line-height: 1.5;
+        }
+        .ticket-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            z-index: 10005;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .ticket-box {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 520px;
+            padding: 35px;
+            text-align: center;
+        }
+        @media (max-width: 900px) {
+            .counsel-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="top-left">
+        <span>💬 1-on-1 Counselling & Global Communications Desk</span>
+        <span>Free Initial Evaluation</span>
+    </div>
+    <div class="top-right">
+        <span>Hotline: +91 88974 53569</span>
+        <a href="dashboard.html" style="color:#FFD580; font-weight:600;">Student Dashboard ➔</a>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <h2>NextStep <span>Global</span></h2>
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="universities.html">Universities</a></li>
+            <li><a href="admission.html">Admissions</a></li>
+            <li><a href="counselling.html" class="active">Counselling</a></li>
+            <li><a href="dashboard.html">Student Portal</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="api-hub.html">API Hub</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="admission.html" class="login-btn">Apply Now</a>
+        </div>
+    </nav>
+</header>
+
+<!-- PAGE CONTAINER -->
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>1-on-1 Counselling & Communication Hub</h1>
+            <p>Module 6 Prototype: Appointment Booking, Counsellor Dispatch & AI Chatbot Assistant (Prajwal)</p>
+        </div>
+        <div class="module-badge">
+            Module 6: Prajwal (Counselling & Communication)
+        </div>
+    </div>
+
+    <!-- COUNSELLING LAYOUT -->
+    <div class="counsel-layout">
+        <!-- LEFT: BOOKING FORM -->
+        <div class="card">
+            <h3 class="card-title">Book a Free 1-on-1 Overseas Consultation</h3>
+            
+            <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+                <!-- 1. MODE SELECTION -->
+                <label style="font-size:13px; font-weight:700; color:#0B1F54; margin-bottom:10px; display:block;">1. Select Consultation Mode</label>
+                <div class="mode-selection-grid">
+                    <div class="mode-card active" id="modeVirtual" onclick="selectMode('Virtual Zoom Session')">
+                        <div style="font-size:28px;">💻</div>
+                        <h4>Virtual Session</h4>
+                        <p style="font-size:12px; color:#64748B;">Live Video Call via Zoom / Google Meet</p>
+                    </div>
+                    <div class="mode-card" id="modeOffice" onclick="selectMode('In-Person Office Visit')">
+                        <div style="font-size:28px;">🏢</div>
+                        <h4>In-Person Office</h4>
+                        <p style="font-size:12px; color:#64748B;">Visit our Tirupati Head Office</p>
+                    </div>
+                </div>
+
+                <!-- 2. COUNSELLOR SELECTION -->
+                <label style="font-size:13px; font-weight:700; color:#0B1F54; margin-bottom:10px; display:block;">2. Choose Your Destination Specialist</label>
+                <div class="counsellor-select-grid" id="counsellorOptions">
+                    <!-- Populated dynamically from NextStepData -->
+                </div>
+
+                <!-- 3. DATE & TIME SELECTION -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Preferred Date *</label>
+                        <input type="date" id="bookingDate" value="2026-03-25" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Time Slot *</label>
+                        <select id="bookingTimeSelect">
+                            <option value="10:00 AM">10:00 AM - 10:45 AM</option>
+                            <option value="11:30 AM" selected>11:30 AM - 12:15 PM</option>
+                            <option value="02:00 PM">02:00 PM - 02:45 PM</option>
+                            <option value="04:30 PM">04:30 PM - 05:15 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 4. APPLICANT DETAILS -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Your Full Name *</label>
+                        <input type="text" id="bookName" value="M. Reddy Vishnu Vardhan" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" id="bookEmail" value="vishnu@nextstepglobal.in" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="bookPhone" value="+91 88974 53569" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Target Country Preference *</label>
+                        <select id="bookCountry">
+                            <option value="UK">United Kingdom</option>
+                            <option value="USA">United States</option>
+                            <option value="Canada">Canada</option>
+                            <option value="Australia">Australia</option>
+                            <option value="Germany">Germany</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Questions / Notes for the Counsellor</label>
+                    <textarea id="bookNotes" rows="2" placeholder="e.g. Need assistance with Oxford SOP and scholarship grants..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%; padding:14px; font-size:15px; border:none;">
+                    📅 Confirm Appointment & Generate Pass
+                </button>
+            </form>
+        </div>
+
+        <!-- RIGHT: NOTIFICATIONS & AI CHATBOT HIGHLIGHT -->
+        <div>
+            <!-- Active Notifications -->
+            <div class="card">
+                <h3 class="card-title">Counsellor Communication Feed</h3>
+                
+                <div class="notice-card">
+                    <div class="notice-icon">📢</div>
+                    <div>
+                        <h5>Oxford Dossier Reviewed</h5>
+                        <p>Dr. Ramesh Sharma verified your SOP and approved it for submission to the Department of Computer Science.</p>
+                        <span style="font-size:10px; color:#94A3B8;">Today at 9:15 AM</span>
+                    </div>
+                </div>
+
+                <div class="notice-card">
+                    <div class="notice-icon">🛂</div>
+                    <div>
+                        <h5>Visa Mock Drills Starting</h5>
+                        <p>UK and US visa mock interview slots for Fall 2026 are now open. Practice answering financial questions.</p>
+                        <span style="font-size:10px; color:#94A3B8;">Yesterday</span>
+                    </div>
+                </div>
+
+                <div class="notice-card">
+                    <div class="notice-icon">💰</div>
+                    <div>
+                        <h5>New Chancellor's Grant Announced</h5>
+                        <p>Up to £5,000 automatic tuition discount for STEM postgraduates with CGPA > 8.0.</p>
+                        <span style="font-size:10px; color:#94A3B8;">3 days ago</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chatbot Highlight -->
+            <div class="card" style="background:linear-gradient(135deg, #0B1F54, #1E3A8A); color:white;">
+                <div style="font-size:36px; margin-bottom:12px;">🤖</div>
+                <h4 style="font-size:18px; margin-bottom:6px;">24/7 AI Abroad Study Assistant</h4>
+                <p style="font-size:13px; color:#CBD5E1; line-height:1.6; margin-bottom:16px;">
+                    Have instant questions about IELTS cutoffs, visa work rights, or tuition costs? Click the floating chat icon at the bottom-right of your screen anytime!
+                </p>
+                <button class="btn-primary" style="font-size:13px; padding:10px 18px;" onclick="document.getElementById('nsgChatBtn').click()">
+                    Open Live AI Chatbot 💬
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOOKING CONFIRMATION MODAL -->
+<div class="ticket-modal" id="ticketModal">
+    <div class="ticket-box">
+        <div style="font-size:48px; margin-bottom:10px;">🎉</div>
+        <h3 style="color:#0B1F54; font-size:22px; margin-bottom:6px;">Counselling Session Confirmed!</h3>
+        <p style="color:#64748B; font-size:13px; margin-bottom:20px;">Your 1-on-1 session has been booked and synchronized with our advisor calendar.</p>
+
+        <div style="background:#F8FAFC; border:1px solid #E2E8F0; border-radius:14px; padding:20px; text-align:left; font-size:13px; margin-bottom:24px;" id="ticketDetails">
+            <!-- Dynamically populated -->
+        </div>
+
+        <div style="display:flex; justify-content:center; gap:12px;">
+            <button class="btn-secondary" onclick="closeTicketModal()">Close</button>
+            <a href="dashboard.html" class="btn-primary">Go to Student Dashboard ➔</a>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+<script src="js/team-bar.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+    let selectedMode = "Virtual Zoom Session";
+    let selectedCounsellor = "Dr. Ramesh Sharma";
+
+    function selectMode(mode) {
+        selectedMode = mode;
+        document.getElementById("modeVirtual").classList.toggle("active", mode === "Virtual Zoom Session");
+        document.getElementById("modeOffice").classList.toggle("active", mode === "In-Person Office Visit");
+    }
+
+    function renderCounsellors() {
+        const container = document.getElementById("counsellorOptions");
+        container.innerHTML = "";
+
+        NextStepData.counsellors.forEach((c, idx) => {
+            const div = document.createElement("div");
+            div.className = `counsellor-option ${idx === 0 ? 'active' : ''}`;
+            div.onclick = function() {
+                document.querySelectorAll(".counsellor-option").forEach(el => el.classList.remove("active"));
+                div.classList.add("active");
+                selectedCounsellor = c.name;
+            };
+            div.innerHTML = `
+                <div class="counsellor-avatar-lg">${c.avatar}</div>
+                <div style="flex:1;">
+                    <h4 style="font-size:15px; color:#0B1F54; margin-bottom:2px;">${c.name}</h4>
+                    <p style="font-size:12px; color:#FF6600; font-weight:600; margin-bottom:2px;">${c.title}</p>
+                    <p style="font-size:12px; color:#64748B;">Specialist: ${c.region} • Rating: ⭐ ${c.rating}</p>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function handleBookingSubmit(e) {
+        e.preventDefault();
+        const randId = "CB-" + Math.floor(100 + Math.random() * 900);
+        const name = document.getElementById("bookName").value;
+        const date = document.getElementById("bookingDate").value;
+        const time = document.getElementById("bookingTimeSelect").value;
+        const country = document.getElementById("bookCountry").value;
+
+        const booking = {
+            id: randId,
+            studentName: name,
+            counsellor: selectedCounsellor,
+            mode: selectedMode,
+            date: date,
+            time: time,
+            status: "Confirmed",
+            notes: document.getElementById("bookNotes").value || "General Profile Guidance"
+        };
+
+        NextStepData.saveBooking(booking);
+
+        const ticketDetails = document.getElementById("ticketDetails");
+        ticketDetails.innerHTML = `
+            <div><strong>Booking Pass ID:</strong> ${booking.id}</div>
+            <div><strong>Student Name:</strong> ${booking.studentName}</div>
+            <div><strong>Counsellor:</strong> ${booking.counsellor}</div>
+            <div><strong>Mode:</strong> ${booking.mode}</div>
+            <div><strong>Date & Time:</strong> ${booking.date} at ${booking.time}</div>
+            <div><strong>Target Country:</strong> ${country}</div>
+        `;
+
+        document.getElementById("ticketModal").style.display = "flex";
+        showToast("Counselling session confirmed!", "success");
+    }
+
+    function closeTicketModal() {
+        document.getElementById("ticketModal").style.display = "none";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderCounsellors();
+    });
+</script>
+</body>
+</html>
