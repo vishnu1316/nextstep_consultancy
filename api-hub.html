@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database & Backend APIs Console | NextStep Global</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .api-tabs {
+            display: flex;
+            background: white;
+            padding: 8px;
+            border-radius: 14px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-light);
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+        .api-tab {
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #64748B;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .api-tab.active {
+            background: #0B1F54;
+            color: white;
+        }
+        .endpoint-card {
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #E2E8F0;
+            margin-bottom: 18px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .endpoint-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #F8FAFC;
+            cursor: pointer;
+            border-bottom: 1px solid #E2E8F0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .method-badge {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .method-get { background: #E0F2FE; color: #0284C7; }
+        .method-post { background: #DCFCE7; color: #15803D; }
+        .endpoint-path {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0F172A;
+            margin-left: 10px;
+        }
+        .endpoint-body {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .code-box {
+            background: #0F172A;
+            color: #E2E8F0;
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            max-height: 280px;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+        .schema-container {
+            background: #0F172A;
+            color: #93C5FD;
+            padding: 24px;
+            border-radius: 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            line-height: 1.7;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+        .table-def-card {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        .table-def-card h4 {
+            color: #0B1F54;
+            font-size: 15px;
+            margin-bottom: 8px;
+            font-family: 'Fira Code', monospace;
+        }
+        @media (max-width: 900px) {
+            .endpoint-body {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="top-left">
+        <span>🗄️ Backend Services & MySQL Console: <strong>Santhosh</strong></span>
+        <span>Node.js REST API Server • Port 3000</span>
+    </div>
+    <div class="top-right">
+        <span>Server Engine: Express / Native Node.js</span>
+        <a href="index.html" style="color:#FFD580; font-weight:600;">Main Portal ➔</a>
+    </div>
+</div>
+
+<!-- NAVBAR -->
+<header>
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html">
+                <h2>NextStep <span>Global</span></h2>
+            </a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="universities.html">Universities</a></li>
+            <li><a href="admission.html">Admissions</a></li>
+            <li><a href="counselling.html">Counselling</a></li>
+            <li><a href="dashboard.html">Student Portal</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="api-hub.html" class="active">API Hub</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="login.html" class="portal-btn">Login</a>
+        </div>
+    </nav>
+</header>
+
+<!-- PAGE CONTAINER -->
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Database Schema & Backend API Console</h1>
+            <p>Module 7 Prototype: Relational MySQL Database, Express REST Endpoints & Live API Explorer (Santhosh)</p>
+        </div>
+        <div class="module-badge">
+            Module 7: Santhosh (Database & Backend APIs)
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="api-tabs">
+        <div class="api-tab active" id="tabExplorer" onclick="switchApiTab('explorer')">
+            ⚡ Interactive REST API Explorer (7 Endpoints)
+        </div>
+        <div class="api-tab" id="tabSchema" onclick="switchApiTab('schema')">
+            🗄️ MySQL Database Schema (DDL & ER Architecture)
+        </div>
+        <div class="api-tab" id="tabArch" onclick="switchApiTab('arch')">
+            ⚙️ Backend Architecture & Deployment
+        </div>
+    </div>
+
+    <!-- VIEW 1: INTERACTIVE REST API EXPLORER -->
+    <div id="viewExplorer">
+        <div class="card" style="margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <div>
+                    <h3 style="color:#0B1F54; font-size:18px;">RESTful Endpoint Inspector</h3>
+                    <p style="font-size:13px; color:#64748B;">Test simulated backend requests directly in the browser or via <code>http://localhost:3000</code>.</p>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-size:12px; color:#10B981; font-weight:700;">🟢 Server Mock Engine: READY</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENDPOINT 1: HEALTH -->
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <div>
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-path">/api/health</span>
+                </div>
+                <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="testEndpoint('health')">Send Request 🚀</button>
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Description & Parameters</h5>
+                    <p style="font-size:13px; color:#64748B; margin-bottom:10px;">Returns backend health status, uptime, MySQL connection pool status, and developer attribution.</p>
+                    <span style="font-size:12px; font-weight:600; color:#334155;">Headers:</span>
+                    <div style="font-size:12px; color:#64748B; margin-top:4px;">Accept: application/json</div>
+                </div>
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Response Payload (HTTP 200)</h5>
+                    <pre class="code-box" id="resHealth">{
+  "status": "ONLINE",
+  "service": "NextStep Global Backend API",
+  "module": "Module 7 - Database & Backend APIs",
+  "developer": "Santhosh",
+  "database": "MySQL 8.0 (nextstep_consultancy)",
+  "uptime": "99.98%"
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENDPOINT 2: AUTH LOGIN -->
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <div>
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-path">/api/auth/login</span>
+                </div>
+                <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="testEndpoint('login')">Send Request 🚀</button>
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Request Body (JSON)</h5>
+                    <pre class="code-box">{
+  "email": "vishnu@nextstepglobal.in",
+  "password": "password123"
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Response Payload (HTTP 200 OK)</h5>
+                    <pre class="code-box" id="resLogin">{
+  "success": true,
+  "message": "Authentication successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoidmlzaG51QG5leHRzdGVwZ2xvYmFsLmluIiwicm9sZSI6InN0dWRlbnQifQ...",
+  "user": {
+    "id": 1,
+    "name": "M. Reddy Vishnu Vardhan",
+    "role": "student"
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENDPOINT 3: GET UNIVERSITIES -->
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <div>
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-path">/api/universities?country=UK</span>
+                </div>
+                <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="testEndpoint('universities')">Send Request 🚀</button>
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Query Parameters</h5>
+                    <div style="font-size:13px; color:#475569;"><code>country</code> (string, optional) - e.g. UK, USA, Canada, Germany</div>
+                </div>
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Response Payload (HTTP 200 OK)</h5>
+                    <pre class="code-box" id="resUniversities">{
+  "success": true,
+  "count": 1,
+  "universities": [
+    {
+      "id": "u1",
+      "name": "University of Oxford",
+      "country": "UK",
+      "city": "Oxford",
+      "ranking": "#1 Global",
+      "tuition": "£28,000 - £39,000/yr",
+      "ielts": 7.0
+    }
+  ]
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENDPOINT 4: SUBMIT APPLICATION -->
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <div>
+                    <span class="method-badge method-post">POST</span>
+                    <span class="endpoint-path">/api/applications</span>
+                </div>
+                <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="testEndpoint('apply')">Send Request 🚀</button>
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Request Payload (JSON)</h5>
+                    <pre class="code-box">{
+  "studentName": "M. Reddy Vishnu Vardhan",
+  "university": "University of Oxford",
+  "course": "MSc Computer Science",
+  "country": "UK",
+  "intake": "Fall 2026"
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Response Payload (HTTP 201 Created)</h5>
+                    <pre class="code-box" id="resApply">{
+  "success": true,
+  "message": "Application created and queued for compliance review",
+  "application": {
+    "id": "NSG-2026-8941",
+    "status": "Submitted",
+    "stage": 1,
+    "appliedDate": "2026-03-19"
+  }
+}</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENDPOINT 5: TRACK APPLICATION -->
+        <div class="endpoint-card">
+            <div class="endpoint-header">
+                <div>
+                    <span class="method-badge method-get">GET</span>
+                    <span class="endpoint-path">/api/applications/NSG-2026-8941/track</span>
+                </div>
+                <button class="btn-primary" style="padding:6px 14px; font-size:12px;" onclick="testEndpoint('track')">Send Request 🚀</button>
+            </div>
+            <div class="endpoint-body">
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Path Parameters</h5>
+                    <div style="font-size:13px; color:#475569;"><code>applicationId</code>: Unique dossier reference (e.g. NSG-2026-8941)</div>
+                </div>
+                <div>
+                    <h5 style="color:#0B1F54; margin-bottom:8px;">Response Payload (HTTP 200 OK)</h5>
+                    <pre class="code-box" id="resTrack">{
+  "success": true,
+  "applicationId": "NSG-2026-8941",
+  "status": "Offer Letter Issued",
+  "currentStage": 4,
+  "timeline": [
+    { "stage": 1, "title": "Dossier Submitted", "completed": true },
+    { "stage": 2, "title": "Documents Verified", "completed": true },
+    { "stage": 3, "title": "University Review", "completed": true },
+    { "stage": 4, "title": "Offer Letter Issued", "completed": true },
+    { "stage": 5, "title": "Visa Processing", "completed": false }
+  ]
+}</pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 2: MYSQL DATABASE SCHEMA -->
+    <div id="viewSchema" style="display:none;">
+        <div class="card" style="margin-bottom:25px;">
+            <h3 style="color:#0B1F54; margin-bottom:6px;">MySQL 8.0 Relational Architecture</h3>
+            <p style="font-size:13px; color:#64748B; margin-bottom:20px;">
+                Designed in Third Normal Form (3NF) with foreign keys linking users, student profiles, admissions, university catalog, and counsellor bookings.
+            </p>
+
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:15px; margin-bottom:25px;">
+                <div class="table-def-card">
+                    <h4>users</h4>
+                    <p style="font-size:12px; color:#64748B;">Stores credentials, role-based auth (student, counsellor, admin), and bcrypt hash.</p>
+                </div>
+                <div class="table-def-card">
+                    <h4>student_profiles</h4>
+                    <p style="font-size:12px; color:#64748B;">Linked to users(user_id). Academic GPA, IELTS score, passport details.</p>
+                </div>
+                <div class="table-def-card">
+                    <h4>universities</h4>
+                    <p style="font-size:12px; color:#64748B;">Global catalog with country index, rankings, tuition range, and acceptance rate.</p>
+                </div>
+                <div class="table-def-card">
+                    <h4>applications</h4>
+                    <p style="font-size:12px; color:#64748B;">Central transaction table linking student, university, course with status & stage.</p>
+                </div>
+                <div class="table-def-card">
+                    <h4>counselling_appointments</h4>
+                    <p style="font-size:12px; color:#64748B;">Schedules student sessions with advisor ID, date, time slot, and mode.</p>
+                </div>
+            </div>
+
+            <h4 style="color:#0B1F54; margin-bottom:10px;">Raw SQL Definition (schema.sql)</h4>
+            <div class="schema-container" id="sqlSchemaViewer">
+-- Loading schema.sql ...
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: ARCHITECTURE & DEPLOYMENT -->
+    <div id="viewArch" style="display:none;">
+        <div class="card">
+            <h3 style="color:#0B1F54; margin-bottom:12px;">Backend Architecture & Technical Specifications</h3>
+            
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:25px; margin-top:20px;">
+                <div>
+                    <h4 style="color:#0B1F54; font-size:16px; margin-bottom:10px;">1. API & Security Architecture</h4>
+                    <ul style="font-size:13px; color:#475569; line-height:1.9;">
+                        <li><strong>RESTful Design:</strong> Standard HTTP Verbs (GET, POST, PUT, DELETE) with semantic status codes (200, 201, 400, 401, 500).</li>
+                        <li><strong>JWT Authentication:</strong> Bearer tokens issued on login, signed with HMAC-SHA256 secret.</li>
+                        <li><strong>CORS Handling:</strong> Cross-Origin Resource Sharing enabled for seamless frontend decoupling.</li>
+                        <li><strong>Document File Handling:</strong> Multi-part file upload support (Multer) for PDF passports, transcripts, and SOPs.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color:#0B1F54; font-size:16px; margin-bottom:10px;">2. How to Run Locally for Presentation</h4>
+                    <div style="background:#0F172A; color:#A7F3D0; padding:18px; border-radius:10px; font-family:'Fira Code', monospace; font-size:12px; line-height:1.8;">
+                        # 1. Start the Node backend server<br>
+                        node server.js<br><br>
+                        # 2. Server will launch on:<br>
+                        http://localhost:3000<br><br>
+                        # 3. Test health check:<br>
+                        curl http://localhost:3000/api/health
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-bottom" style="margin-top:0; border:none;">
+        <p>© 2026 NextStep Global Educational Services • Module 7 by Santhosh</p>
+        <a href="index.html" style="color:#FF6600;">Back to Home</a>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/script.js"></script>
+<script src="js/team-bar.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+    function switchApiTab(tab) {
+        document.querySelectorAll(".api-tab").forEach(t => t.classList.remove("active"));
+        document.getElementById("viewExplorer").style.display = "none";
+        document.getElementById("viewSchema").style.display = "none";
+        document.getElementById("viewArch").style.display = "none";
+
+        if (tab === 'explorer') {
+            document.getElementById("tabExplorer").classList.add("active");
+            document.getElementById("viewExplorer").style.display = "block";
+        } else if (tab === 'schema') {
+            document.getElementById("tabSchema").classList.add("active");
+            document.getElementById("viewSchema").style.display = "block";
+            loadSqlSchema();
+        } else if (tab === 'arch') {
+            document.getElementById("tabArch").classList.add("active");
+            document.getElementById("viewArch").style.display = "block";
+        }
+    }
+
+    function testEndpoint(ep) {
+        showToast(`Dispatched request to /api/${ep}`, "info");
+        // Flash the result box
+        const targetId = "res" + ep.charAt(0).toUpperCase() + ep.slice(1);
+        const el = document.getElementById(targetId);
+        if (el) {
+            el.style.borderColor = "#10B981";
+            el.style.boxShadow = "0 0 10px rgba(16, 185, 129, 0.4)";
+            setTimeout(() => {
+                el.style.borderColor = "transparent";
+                el.style.boxShadow = "none";
+            }, 1000);
+        }
+    }
+
+    function loadSqlSchema() {
+        fetch('schema.sql')
+            .then(res => res.text())
+            .then(sql => {
+                document.getElementById("sqlSchemaViewer").innerText = sql;
+            })
+            .catch(() => {
+                document.getElementById("sqlSchemaViewer").innerText = `-- NextStep Global MySQL Schema (Preloaded)\n-- See schema.sql in project directory\n\nCREATE TABLE users (\n    user_id INT AUTO_INCREMENT PRIMARY KEY,\n    full_name VARCHAR(100) NOT NULL,\n    email VARCHAR(150) NOT NULL UNIQUE,\n    password_hash VARCHAR(255) NOT NULL,\n    role ENUM('student', 'counsellor', 'admin') DEFAULT 'student'\n);\n\nCREATE TABLE applications (\n    application_id VARCHAR(30) PRIMARY KEY,\n    student_id INT NOT NULL,\n    university_id INT NOT NULL,\n    status VARCHAR(50) DEFAULT 'Submitted',\n    stage INT DEFAULT 1\n);`;
+            });
+    }
+</script>
+</body>
+</html>
